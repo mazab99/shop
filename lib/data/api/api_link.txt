@@ -1,0 +1,8 @@
+//تحط هنا لينك ال api بتاعك عشان يكون مرجع الك
+
+// https://newsapi.org/
+v2/top-headlines?
+{'country': 'eg', 'category: 'business', 'apiKey':'09d7535fab10496a84591afdf3c145be'}
+
+
+https://newsapi.org/ v2/everything?q=tesla&apiKey=09d7535fab10496a84591afdf3c145be
