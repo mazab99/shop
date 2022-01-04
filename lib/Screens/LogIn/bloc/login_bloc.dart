@@ -9,11 +9,11 @@ class LoginBloc extends Cubit<LogInState> {
   LoginBloc() : super(LoginInitialState());
 
   static LoginBloc get(context) => BlocProvider.of(context);
-  LoginModel? loginModel;
+  LoginModel loginModel;
 
   void userLogin({
-    required String email,
-    required String password,
+    @required String email,
+    @required String password,
   }) {
     emit(LoginSLoadingState());
     DioHelper.postData(
@@ -26,10 +26,10 @@ class LoginBloc extends Cubit<LogInState> {
     ).then((value) {
       print(value.data);
       loginModel=LoginModel.fromJson(value.data);
-      print(loginModel!.data!.token);
-      print(loginModel!.status);
-      print(loginModel!.message);
-      emit(LoginSucessState(loginModel!));
+      print(loginModel.data.token);
+      print(loginModel.status);
+      print(loginModel.message);
+      emit(LoginSucessState(loginModel));
     }).catchError((error) {
       print(error.toString());
       emit(LoginErrorState(error.toString()));
@@ -40,7 +40,7 @@ class LoginBloc extends Cubit<LogInState> {
   bool isObsecure = true;
 
   void changeSuffexIcon() {
-    isObsecure = !isObsecure;
+    isObsecure = isObsecure;
     suffixIcon =
         isObsecure ? Icons.remove_red_eye_outlined : Icons.visibility_off;
 

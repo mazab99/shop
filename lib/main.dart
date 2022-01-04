@@ -14,13 +14,13 @@ import 'package:shop/shared/network/end_point.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   DioHelper.init();
-  await CashHelper.init();
-  bool? isDark = CashHelper.getData(key: 'isDark');
-  bool? isRtl = CashHelper.getData(key: 'isRtl');
+  await CacheHelper.init();
+  bool isDark = CacheHelper.getData(key: 'isDark');
+  bool isRtl = CacheHelper.getData(key: 'isRtl');
   Widget widget;
-  bool? onboarding = CashHelper.getData(key: 'onBoarding');
+  bool onboarding = CacheHelper.getData(key: 'onBoarding');
   print(onboarding);
-  token = CashHelper.getData(key: 'token');
+  token = CacheHelper.getData(key: 'token');
   print('My Token is $token');
 
   if (onboarding != null) {
@@ -37,10 +37,9 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  final bool? isDark;
-
-  final bool? isRtl;
-  final Widget startWidget;
+  bool isDark;
+  bool isRtl;
+  Widget startWidget;
 
   MyApp(this.isDark, this.startWidget, this.isRtl);
 
@@ -52,8 +51,11 @@ class MyApp extends StatelessWidget {
           create: (BuildContext context) => ShopBloc()
             ..getHomeData()
             ..getCategories()
-            ..getFavourites()
-            ..getUserData(),
+            ..getFavorite()
+            ..getUserData()..
+            updateUserData()
+            ..changeAppMode(fromShared: isDark)
+            ..changeAppDirection(fromShared: isRtl),
         ),
       ],
       child: BlocConsumer<ShopBloc, ShopStates>(
@@ -63,7 +65,7 @@ class MyApp extends StatelessWidget {
           theme: lightmode,
           darkTheme: darkmode,
           themeMode:
-              ShopBloc.get(context).isDark ? ThemeMode.dark : ThemeMode.light,
+              ShopBloc.get(context).isDark ? ThemeMode.light : ThemeMode.dark,
           home: startWidget,
         ),
       ),

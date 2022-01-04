@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:shop/shared/constants/my_colors.dart';
 
-var darkmode=ThemeData(
+var darkmode = ThemeData(
   inputDecorationTheme: InputDecorationTheme(
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(20),
@@ -11,11 +10,11 @@ var darkmode=ThemeData(
         color: MyColors.primary,
       ),
     ),
-    hintStyle: GoogleFonts.cairo(
-      textStyle: TextStyle(
-        color: Colors.white.withOpacity(0.7),
-      ),
-    ),
+    hintStyle: (TextStyle(
+      color: Colors.white.withOpacity(0.7),
+      fontWeight: FontWeight.w900,
+      fontStyle: FontStyle.normal,
+    )),
   ),
   scaffoldBackgroundColor: MyColors.secondary,
   primarySwatch: MyColors.primaryColor,
@@ -26,13 +25,12 @@ var darkmode=ThemeData(
       statusBarIconBrightness: Brightness.light,
     ),
     elevation: 0,
-    titleTextStyle: GoogleFonts.kufam(
-      textStyle: TextStyle(
-        fontWeight: FontWeight.bold,
-        color: MyColors.primary,
-        fontSize: 20,
-      ),
-    ),
+    titleTextStyle: (TextStyle(
+      fontWeight: FontWeight.w900,
+      fontStyle: FontStyle.normal,
+      color: MyColors.primary,
+      fontSize: 20,
+    )),
     iconTheme: IconThemeData(
       color: Colors.white.withOpacity(0.7),
     ),
@@ -43,26 +41,21 @@ var darkmode=ThemeData(
     unselectedItemColor: Colors.white.withOpacity(0.6),
     elevation: 20,
     backgroundColor: MyColors.secondary,
-    selectedLabelStyle: GoogleFonts.cairo(
-      textStyle: TextStyle(
+    selectedLabelStyle: (TextStyle(
         fontSize: 16,
-        fontWeight: FontWeight.bold,
-      ),
-    ),
-    unselectedLabelStyle: GoogleFonts.cairo(
-      textStyle: TextStyle(
+        fontWeight: FontWeight.w900,
+        fontStyle: FontStyle.normal)),
+    unselectedLabelStyle: (TextStyle(
         fontSize: 15,
-        fontWeight: FontWeight.w600,
-      ),
-    ),
+        fontWeight: FontWeight.w900,
+        fontStyle: FontStyle.normal)),
   ),
   textTheme: TextTheme(
-    bodyText1: GoogleFonts.cairo(
-      textStyle: TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.bold,
-        color: Colors.white.withOpacity(0.9),
-      ),
-    ),
+    bodyText1: (TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.w900,
+      fontStyle: FontStyle.normal,
+      color: Colors.white.withOpacity(0.9),
+    )),
   ),
 );

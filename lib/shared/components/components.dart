@@ -11,53 +11,7 @@ Widget divider() => Divider(
       color: MyColors.dark,
     );
 
-Widget defaultFormField({
-  required TextEditingController controller,
-  required TextInputType keyboardType,
-  String? Function(String?)? validate,
-  VoidCallback? onPressed,
-  Function(String?)? onChanged,
-  required IconData prefixIcon,
-  double borderRadius = 0,
-  String? hint,
-  IconData? suffixIcon,
-  bool isPassword = false,
-  required bool isRtl,
-  Color color = Colors.black,
-  Color textColor = Colors.white,
-}) =>
-    TextFormField(
-      textDirection: isRtl ? TextDirection.rtl : TextDirection.ltr,
-      textAlign: isRtl ? TextAlign.right : TextAlign.left,
-      controller: controller,
-      style: TextStyle(
-        color: textColor,
-      ),
-      keyboardType: keyboardType,
-      obscureText: isPassword,
-      decoration: InputDecoration(
-        hintText: hint,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(borderRadius),
-          borderSide: BorderSide(color: Colors.blue),
-        ),
-        prefixIcon: Icon(
-          prefixIcon,
-          color: color,
-        ),
-        suffixIcon: suffixIcon != null
-            ? IconButton(
-                onPressed: onPressed,
-                icon: Icon(
-                  suffixIcon,
-                ),
-              )
-            : null,
-      ),
-      validator: validate,
-      onChanged: onChanged,
-      onTap: onPressed,
-    );
+
 
 //navigateTo(context,ScreenName()); <<==لما تعمل انتقال بين شاشتين تستخدما وتحط في الزر اللي يعمل انتقال
 void navigateTo(context, widget) =>
@@ -79,15 +33,15 @@ void navigateandFinish(
         (Route<dynamic> route) => false);
 
 void showToast({
-  required String text,
-  required ToastStates states,
+  @required String text,
+  @required ToastStates state,
 }) =>
     Fluttertoast.showToast(
       msg: text,
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
       timeInSecForIosWeb: 1,
-      backgroundColor: choseToastColor(states),
+      backgroundColor: choseToastColor(state),
       textColor: Colors.white,
       fontSize: 16.0,
     );
@@ -115,7 +69,7 @@ Widget AppLogout(context) => TextButton(
       //وبيعمل navigateAndFinish لل LOGin
       child: Text('Logout'),
       onPressed: () {
-        CashHelper.removeData(key: 'token').then((value) {
+        CacheHelper.removeData(key: 'token').then((value) {
           if (value) {
             navigateandFinish(context, LoginScreen());
           }
@@ -129,3 +83,82 @@ void printFullText(String text) {
 }
 
 
+
+Widget defaultButton({
+  double width = double.infinity,
+  Color background = Colors.blue,
+  bool isUpperCase = true,
+  double radius = 3.0,
+  @required Function function,
+  @required String text,
+}) =>
+    Container(
+      width: width,
+      height: 50.0,
+      child: MaterialButton(
+        onPressed: function,
+        child: Text(
+          isUpperCase ? text.toUpperCase() : text,
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(
+          radius,
+        ),
+        color: background,
+      ),
+    );
+
+Widget defaultTextButton({
+  @required Function function,
+  @required String text,
+}) =>
+    TextButton(
+      onPressed: function,
+      child: Text(
+        text.toUpperCase(),
+      ),
+    );
+
+Widget defaultFormField({
+  @required TextEditingController controller,
+  @required TextInputType type,
+  Function onSubmit,
+  Function onChange,
+  Function onTap,
+  bool isPassword = false,
+  @required Function validate,
+  @required String label,
+  @required IconData prefix,
+  IconData suffix,
+  Function suffixPressed,
+  bool isClickable = true,
+}) =>
+    TextFormField(
+      controller: controller,
+      keyboardType: type,
+      obscureText: isPassword,
+      enabled: isClickable,
+      onFieldSubmitted: onSubmit,
+      onChanged: onChange,
+      onTap: onTap,
+      validator: validate,
+      decoration: InputDecoration(
+        labelText: label,
+        prefixIcon: Icon(
+          prefix,
+        ),
+        suffixIcon: suffix != null
+            ? IconButton(
+          onPressed: suffixPressed,
+          icon: Icon(
+            suffix,
+          ),
+        )
+            : null,
+        border: OutlineInputBorder(),
+      ),
+    );

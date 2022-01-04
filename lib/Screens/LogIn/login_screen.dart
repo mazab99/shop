@@ -1,4 +1,4 @@
-import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:conditional_builder/conditional_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -11,7 +11,7 @@ import 'package:shop/shared/network/Local%20Network/SharedPreferances/cashe_help
 import 'package:shop/shared/network/end_point.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({Key key}) : super(key: key);
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -30,20 +30,23 @@ class _LoginScreenState extends State<LoginScreen> {
         child: BlocConsumer<LoginBloc, LogInState>(
           listener: (context, state) {
             if (state is LoginSucessState) {
-              if (state.loginModel.status!) {
-                print(state.loginModel.data!.token!);
+              if (state.loginModel.status) {
+                print(state.loginModel.data.token);
                 print(state.loginModel.message);
-                CashHelper.saveData(
-                        key: 'token', value: state.loginModel.data!.token!)
-                    .then((value) {
-                  token = state.loginModel.data!.token!;
+                CacheHelper.saveData(
+                  key: 'token',
+                  value: state.loginModel.data.token,
+                ).then((value) {
+                  token = state.loginModel.data.token;
                   navigateandFinish(context, ShopLayout());
                 });
-                //showToast(states: ToastStates.SUCESS, text: state.loginModel.message.toString());
+                showToast(
+                    state: ToastStates.SUCESS,
+                    text: state.loginModel.message.toString());
               } else {
                 print(state.loginModel.message);
                 showToast(
-                    states: ToastStates.ERROR,
+                    state: ToastStates.ERROR,
                     text: state.loginModel.message.toString());
               }
             }
@@ -108,10 +111,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                   TextFormField(
                                     controller: emailController,
                                     validator: (value) {
-                                      if (value!.isEmpty ||
-                                          !value.contains('@') ||
-                                          !value.contains('.')) {
-                                        return 'Enter a valid User Email!';
+                                      if (value.isEmpty) {
+                                        return 'Enter a valid User Email';
                                       }
                                       return null;
                                     },
@@ -174,13 +175,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                   TextFormField(
                                     controller: passwordController,
                                     validator: (value) {
-                                      if (value!.isEmpty || value.length < 8) {
-                                        return 'Password is to short at least 8 !';
+                                      if (value.isEmpty || value.length < 8) {
+                                        return 'Password is to short at least 8 ';
                                       }
                                       return null;
                                     },
                                     onFieldSubmitted: (value) {
-                                      if (formKey.currentState!.validate()) {
+                                      if (formKey.currentState.validate()) {
                                         LoginBloc.get(context).userLogin(
                                           email: emailController.text,
                                           password: passwordController.text,
@@ -267,7 +268,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                     child: ConditionalBuilder(
-                                      condition: state is! LoginSLoadingState,
+                                      condition: state is LoginSLoadingState,
                                       builder: (context) => MaterialButton(
                                         child: Text("Login",
                                             style: TextStyle(
@@ -276,8 +277,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 fontWeight: FontWeight.w500,
                                                 fontStyle: FontStyle.normal)),
                                         onPressed: () {
-                                          if (formKey.currentState!
-                                              .validate()) {
+                                          if (formKey.currentState.validate()) {
                                             LoginBloc.get(context).userLogin(
                                               email: emailController.text,
                                               password: passwordController.text,

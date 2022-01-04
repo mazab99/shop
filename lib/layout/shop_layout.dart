@@ -6,7 +6,6 @@ import 'package:shop/business_logic/StateManagement/Bloc/bloc_states.dart';
 import 'package:shop/shared/components/components.dart';
 
 class ShopLayout extends StatelessWidget {
-  const ShopLayout({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ShopBloc, ShopStates>(
@@ -18,28 +17,33 @@ class ShopLayout extends StatelessWidget {
             centerTitle: true,
             leading: IconButton(
               onPressed: () {
-                //cubit.changeAppDirection();
+                navigateTo(context, SearchScreen());
               },
               icon: Icon(
-                Icons.change_circle_outlined,
+                Icons.search,
+                color: Colors.blue,
+                size: 30,
               ),
             ),
             title: appBarText(context),
             actions: [
               IconButton(
-                  onPressed: () {
-                    navigateTo(context, SearchScreen());
-                  },
-                  icon: Icon(
-                    Icons.search,
-                  )),
-              IconButton(
-                  onPressed: () {
-                   // ShopBloc.get(context).changeAppMode();
-                  },
-                  icon: Icon(
-                    Icons.brightness_4_rounded,
-                  )),
+                onPressed: () {
+                 // navigateTo(context, SettingsScreen());
+                },
+                icon: Icon(
+                  Icons.account_circle_outlined,
+                  color: Colors.blue,
+                  size: 30,
+                ),
+              ),
+              // IconButton(
+              //     onPressed: () {
+              //       ShopBloc.get(context).changeAppMode();
+              //     },
+              //     icon: Icon(
+              //       Icons.brightness_4_rounded,
+              //     )),
             ],
           ),
           body: cubit.screens[cubit.currentIndex],

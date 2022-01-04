@@ -1,28 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:shop/shared/constants/my_colors.dart';
 
-var lightmode=ThemeData(
+var lightmode = ThemeData(
   inputDecorationTheme: InputDecorationTheme(
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(20),
       borderSide: BorderSide(color: MyColors.primary),
     ),
-    hintStyle: GoogleFonts.cairo(
-      textStyle: TextStyle(
+    hintStyle: (
+        TextStyle(
         color: MyColors.dark,
-        fontWeight: FontWeight.w500,
-      ),
+        fontWeight: FontWeight.w900,
+        fontStyle: FontStyle.normal,
+
+      )
     ),
   ),
   textTheme: TextTheme(
-    bodyText1: GoogleFonts.cairo(
-      textStyle: TextStyle(
+    bodyText1:(
+        TextStyle(
         fontSize: 16,
-        fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w900,
+          fontStyle: FontStyle.normal,
         color: MyColors.secondary,
-      ),
+      )
     ),
   ),
   primarySwatch: MyColors.primaryColor,
@@ -34,12 +36,13 @@ var lightmode=ThemeData(
       statusBarIconBrightness: Brightness.dark,
     ),
     elevation: 0,
-    titleTextStyle: GoogleFonts.kufam(
-      textStyle: TextStyle(
+    titleTextStyle: (
+       TextStyle(
         fontSize: 20,
-        fontWeight: FontWeight.bold,
+         fontWeight: FontWeight.w900,
+         fontStyle: FontStyle.normal,
         color: MyColors.primary,
-      ),
+      )
     ),
     iconTheme: IconThemeData(
       color: MyColors.secondary,
@@ -51,17 +54,18 @@ var lightmode=ThemeData(
     unselectedItemColor: MyColors.dark,
     elevation: 20,
     backgroundColor: Colors.white,
-    selectedLabelStyle: GoogleFonts.cairo(
-      textStyle: TextStyle(
+    selectedLabelStyle: (
+         TextStyle(
         fontSize: 16,
-        fontWeight: FontWeight.bold,
-      ),
+        fontWeight: FontWeight.w900,
+           fontStyle: FontStyle.normal
+      )
     ),
-    unselectedLabelStyle: GoogleFonts.cairo(
-      textStyle: TextStyle(
+    unselectedLabelStyle:(
+      TextStyle(
         fontSize: 15,
         fontWeight: FontWeight.w600,
-      ),
+      )
     ),
   ),
 );

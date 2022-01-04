@@ -1,8 +1,8 @@
 class CategoriesModel {
   //هنبعت هنا الداتا بناءا علي الخرج بتاع ال Api
-  bool? status;
+  bool status;
   // String? message;
-  CategoriesDataModel? data;
+  CategoriesDataModel data;
 
   CategoriesModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
@@ -16,17 +16,17 @@ class CategoriesModel {
 }
 
 class CategoriesDataModel {
-  int? current_page;
-  String? first_page_url;
-  int? from;
-  int? last_page;
-  String? last_page_url;
-  String? next_page_url;
-  String? path;
+  int current_page;
+  String first_page_url;
+  int from;
+  int last_page;
+  String last_page_url;
+  String next_page_url;
+  String path;
   dynamic prev_page_url;
-  int? per_page;
-  int? to;
-  int? total;
+  int per_page;
+  int to;
+  int total;
 
   List<DataModel> data = []; //تعملها بعد ما تعمل كلاس DataModel
 
@@ -50,9 +50,9 @@ class CategoriesDataModel {
 }
 //الكلاس ده بيكون عباره عن متغير زي اللي فوق بس يحتوي علي اكثر من متغير يعني داتا
 class DataModel {
-  int? id;
-  String? name;
-  String? image;
+  int id;
+  String name;
+  String image;
 
   DataModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];

@@ -1,9 +1,9 @@
 class HomeModel {
   //هنبعت هنا الداتا بناءا علي الخرج بتاع ال Api
-  bool? status;
+  bool status;
 
   // String? message;
-  HomeDataModel? data;
+  HomeDataModel data;
 
   HomeModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
@@ -31,8 +31,8 @@ class HomeDataModel {
 }
 
 class BannersModel {
-  int? id;
-  String? image;
+  int id;
+  String image;
 
   BannersModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -41,14 +41,14 @@ class BannersModel {
 }
 
 class ProductsModel {
-  int? id;
+  int id;
   dynamic price;
   dynamic old_price;
   dynamic discount;
-  String? image;
-  String? name;
-  bool? in_favorites;
-  bool? in_cart;
+  String image;
+  String name;
+  bool in_favorites;
+  bool in_cart;
   //String? description;
 
   ProductsModel.fromJson(Map<String, dynamic> json) {

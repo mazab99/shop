@@ -15,10 +15,10 @@
 */
 
 class Lesson {
-  late String title;
-  late String url;
-  String? urlToImage;
-  late String publishedAt;
+   String title;
+   String url;
+  String urlToImage;
+   String publishedAt;
 
   Lesson.fromJson(Map<String, dynamic> json) {
     title = json['title'];

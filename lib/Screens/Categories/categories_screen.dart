@@ -6,7 +6,6 @@ import 'package:shop/business_logic/StateManagement/Bloc/bloc_states.dart';
 import 'package:shop/shared/components/components.dart';
 
 class CategoriesScreen extends StatelessWidget {
-  const CategoriesScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,9 +14,9 @@ class CategoriesScreen extends StatelessWidget {
         width: double.infinity,
         child: ListView.separated(
           itemBuilder: (context, index) => buildItem(
-              ShopBloc.get(context).categoriesModel!.data!.data[index]),
+              ShopBloc.get(context).categoriesModel.data.data[index]),
           separatorBuilder: (context, index) => divider(),
-          itemCount: ShopBloc.get(context).categoriesModel!.data!.data.length,
+          itemCount: ShopBloc.get(context).categoriesModel.data.data.length,
         ),
       ),
       listener: (context, state) {},
@@ -30,7 +29,7 @@ Widget buildItem(DataModel model) => Padding(
   child: Row(
     children: [
       Image(
-        image: NetworkImage(model.image!),
+        image: NetworkImage(model.image),
         fit: BoxFit.cover,
         width: 120,
         height: 120,
@@ -39,7 +38,7 @@ Widget buildItem(DataModel model) => Padding(
         width: 20,
       ),
       Text(
-        '${model.name}',
+        model.name,
         style: TextStyle(
             fontSize: 20,
             fontStyle: FontStyle.normal,

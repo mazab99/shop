@@ -1,5 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:conditional_builder/conditional_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop/Screens/Categories/categories_model.dart';
@@ -9,17 +9,17 @@ import 'package:shop/business_logic/StateManagement/Bloc/bloc_states.dart';
 import 'package:shop/shared/components/components.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ShopBloc, ShopStates>(
       listener: (context, state) {
         if (state is ShopSuccessChangeFavState) {
-          if (!state.model.status!) {
+          if (!state.model.status) {
             showToast(
-              text: state.model.message!,
-              states: ToastStates.ERROR,
+              text: state.model.message,
+              state: ToastStates.ERROR,
             );
           }
         }
@@ -28,8 +28,8 @@ class HomeScreen extends StatelessWidget {
         return ConditionalBuilder(
           condition: ShopBloc.get(context).homeModel != null &&
               ShopBloc.get(context).categoriesModel != null,
-          builder: (context) => builderWidget(ShopBloc.get(context).homeModel!,
-              ShopBloc.get(context).categoriesModel!, context),
+          builder: (context) => builderWidget(ShopBloc.get(context).homeModel,
+              ShopBloc.get(context).categoriesModel, context),
           fallback: (context) => Center(
             child: CircularProgressIndicator(
               color: Colors.red,
@@ -50,9 +50,9 @@ Widget builderWidget(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CarouselSlider(
-          items: model.data!.banners
+          items: model.data.banners
               .map((e) => Image(
-            image: NetworkImage(e.image!),
+            image: NetworkImage(e.image),
             width: double.infinity,
             fit: BoxFit.cover,
           ))
@@ -87,7 +87,7 @@ Widget builderWidget(
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  color: Colors.green,
+                  color: ShopBloc.get(context).isDark ?Colors.blue :Colors.black,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
@@ -103,11 +103,11 @@ Widget builderWidget(
                   physics: BouncingScrollPhysics(),
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) =>
-                      buildCategoryItem(categoriesModel.data!.data[index]),
+                      buildCategoryItem(categoriesModel.data.data[index]),
                   separatorBuilder: (context, index) => SizedBox(
                     width: 5,
                   ),
-                  itemCount: categoriesModel.data!.data.length,
+                  itemCount: categoriesModel.data.data.length,
                 ),
               ),
               SizedBox(
@@ -120,7 +120,8 @@ Widget builderWidget(
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  color: Colors.green,
+                  color: ShopBloc.get(context).isDark ?Colors.blue :Colors.black,
+
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
@@ -132,7 +133,7 @@ Widget builderWidget(
           height: 10,
         ),
         Container(
-          color: Colors.grey[300],
+          color: ShopBloc.get(context).isDark ?Colors.white :Colors.black,
           child: GridView.count(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
@@ -141,9 +142,9 @@ Widget builderWidget(
             crossAxisSpacing: 1,
             crossAxisCount: 2,
             children: List.generate(
-                model.data!.products.length,
+                model.data.products.length,
                     (index) =>
-                    buildGridProduct(model.data!.products[index], context)),
+                    buildGridProduct(model.data.products[index], context)),
           ),
         ),
       ],
@@ -160,7 +161,7 @@ Widget buildGridProduct(ProductsModel model, context) => Container(
         alignment: AlignmentDirectional.bottomStart,
         children: [
           Image(
-            image: NetworkImage(model.image!),
+            image: NetworkImage(model.image),
             width: double.infinity,
             height: 250,
             //fit: BoxFit.cover,
@@ -176,7 +177,7 @@ Widget buildGridProduct(ProductsModel model, context) => Container(
                     'Discount',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w900,
                         color: Colors.white,
                         fontStyle: FontStyle.normal,
                         fontSize: 15,
@@ -186,7 +187,7 @@ Widget buildGridProduct(ProductsModel model, context) => Container(
                     width: 5,
                   ),
                   Text(
-                    '${model.discount!}%',
+                    '${model.discount}%',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -207,7 +208,7 @@ Widget buildGridProduct(ProductsModel model, context) => Container(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              model.name!,
+              model.name,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               //textAlign: TextAlign.start,
@@ -224,7 +225,7 @@ Widget buildGridProduct(ProductsModel model, context) => Container(
             Row(
               children: [
                 Text(
-                  '${model.price!}',
+                  '${model.price}',
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   //textAlign: TextAlign.start,
@@ -240,7 +241,7 @@ Widget buildGridProduct(ProductsModel model, context) => Container(
                 ),
                 if (model.discount != 0)
                   Text(
-                    '${model.old_price!}',
+                    '${model.old_price}',
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
@@ -256,11 +257,11 @@ Widget buildGridProduct(ProductsModel model, context) => Container(
                   padding: EdgeInsets.zero,
                   onPressed: () {
                     print(model.id);
-                    ShopBloc.get(context).changeFavouriteStatus(model.id!);
+                    ShopBloc.get(context).changeFavouriteStatus(model.id);
                   },
                   icon: CircleAvatar(
                     radius: 15,
-                    backgroundColor: ShopBloc.get(context).favourutes[model.id]!
+                    backgroundColor: ShopBloc.get(context).favourutes[model.id]
                         ? Colors.red
                         : Colors.grey[500],
                     child: Icon(
@@ -282,7 +283,7 @@ Widget buildCategoryItem(DataModel model) => Stack(
   alignment: AlignmentDirectional.bottomEnd,
   children: [
     Image(
-      image: NetworkImage(model.image!),
+      image: NetworkImage(model.image),
       width: 100,
       height: 100,
       fit: BoxFit.cover,
@@ -291,7 +292,7 @@ Widget buildCategoryItem(DataModel model) => Stack(
       color: Colors.black.withOpacity(0.5),
       width: 100,
       child: Text(
-        '${model.name}',
+        model.name,
         textAlign: TextAlign.center,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,

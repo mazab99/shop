@@ -1,41 +1,27 @@
 class LoginModel {
   //هنبعت هنا الداتا بناءا علي الخرج بتاع ال LOGIN
-  bool? status;
-  String? message;
-  UserData? data;
+  bool status;
+  String message;
+  UserData data;
 
   LoginModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
     //data = json['data'] ;   //كده الداتا ممكن متجيش يعني ممكن يحص اي ايرور
     //عشان كده هنعمل السطر اللي جاي ده نقوله لو الداتا لا تساوي null جيب الداتا غير كده خليها null
-    data = json['data'] != null
-        ? UserData.fromJson(json['data'])
-        : null;
+    data = json['data'] != null ? UserData.fromJson(json['data']) : null;
   }
 }
 
 class UserData {
-  int? id;
-  String? name;
-  String? email;
-  String? phone;
-  String? image;
-  int? points;
-  int? credit;
-  String? token;
-
-  //ممكن نستخدمه وممكن لا
-  // UserData({
-  //   this.id,
-  //   this.name,
-  //   this.email,
-  //   this.phone,
-  //   this.image,
-  //   this.points,
-  //   this.credit,
-  //   this.token,
-  // });
+  int id;
+  String name;
+  String email;
+  String phone;
+  String image;
+  int points;
+  int credit;
+  String token;
 
   //  ده هيعمل عمل غير اللي فوق  named constructor
   UserData.fromJson(Map<String, dynamic> json) {

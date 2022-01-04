@@ -11,6 +11,7 @@ import 'package:shop/Screens/LogIn/login_model.dart';
 import 'package:shop/Screens/Settingss/settings_screen.dart';
 import 'package:shop/data/api/dio_helper.dart';
 import 'package:shop/shared/components/components.dart';
+import 'package:shop/shared/network/Local%20Network/SharedPreferances/cashe_helper.dart';
 import 'package:shop/shared/network/end_point.dart';
 
 import 'bloc_states.dart';
@@ -21,7 +22,7 @@ class ShopBloc extends Cubit<ShopStates> {
   static ShopBloc get(context) => BlocProvider.of(context);
 
   int currentIndex = 0;
-  String? keyWord;
+  String keyWord;
   bool isDark = false;
   bool isRtl = true;
 
@@ -88,30 +89,34 @@ class ShopBloc extends Cubit<ShopStates> {
   ];
 
   //دي عشان لما تغير بين موود ال dark ,light
-//   void changeAppMode({bool? fromShared}) {
-//     if (fromShared != null) {
-//       isDark = fromShared;
-//       emit(ShopChangeModeState());
-//     } else {
-//       isDark = !isDark;
-//       CashHelper.saveData(key: 'isDark', value: isDark).then((value) {
-//         emit(ShopChangeModeState());
-//       });
-//     }
-//   }
-//
+
+  void changeAppMode({bool fromShared})
+  {
+    if (fromShared != null)
+    {
+      isDark = fromShared;
+      emit(AppChangeModeState());
+    } else
+    {
+      isDark = !isDark;
+      CacheHelper.saveData(key: 'isDark', value: isDark).then((value) {
+        emit(AppChangeModeState());
+      });
+    }
+  }
+
 // //دي عشان لما تغير اتجاه البرنامج من اليمين للشمال
-//   void changeAppDirection({bool? fromShared}) {
-//     if (fromShared != null) {
-//       isRtl = fromShared;
-//       emit(ShopChangeDirectionState());
-//     } else {
-//       isRtl = !isRtl;
-//       CashHelper.saveData(key: 'isRtl', value: isRtl).then((value) {
-//         emit(ShopChangeDirectionState());
-//       });
-//     }
-//   }
+  void changeAppDirection({bool fromShared}) {
+    if (fromShared != null) {
+      isRtl = fromShared;
+      emit(ShopChangeDirectionState());
+    } else {
+      isRtl = !isRtl;
+      CacheHelper.saveData(key: 'isRtl', value: isRtl).then((value) {
+        emit(ShopChangeDirectionState());
+      });
+    }
+  }
 
   void changeBottomNavBar(int index) {
     currentIndex = index;
@@ -121,7 +126,7 @@ class ShopBloc extends Cubit<ShopStates> {
   ////////////////////////////////////////
 
   //////////////////////////////////////
-  HomeModel? homeModel;
+  HomeModel homeModel;
   Map<int, bool> favourutes = {};
 
   void getHomeData() {
@@ -130,21 +135,21 @@ class ShopBloc extends Cubit<ShopStates> {
       homeModel = HomeModel.fromJson(value.data);
     //  printFullText(homeModel!.data!.banners[0].image.toString());
      // printFullText(homeModel!.status.toString());
-      homeModel!.data!.products.forEach((element) {
+      homeModel.data.products.forEach((element) {
         favourutes.addAll({
-          element.id!: element.in_favorites!,
+          element.id: element.in_favorites,
         });
       });
     //  printFullText(favourutes.toString());
       emit(ShopSuccessHomeDataState());
     }).catchError((error) {
      // printFullText(error.toString());
-      emit(ShopErrorHomeDataState(error.toString()));
+      emit(ShopErrorHomeDataState());
     });
   }
 
 ///////////////////////////////////////////////////
-  CategoriesModel? categoriesModel;
+  CategoriesModel categoriesModel;
 
   void getCategories() {
     DioHelper.getData(url: getCatrgories, token: token).then((value) {
@@ -158,27 +163,30 @@ class ShopBloc extends Cubit<ShopStates> {
   }
 
 ///////////////////////////////////////
-  FavouritesModel? favouritesModels;
+  FavoritesModel favoritesModel;
 
-  void getFavourites() {
-    emit(ShopLoadingGetFavState());
+  void getFavorite() {
+    emit(ShopLoadingGetFavoritesState());
+
     DioHelper.getData(
       url: getFavorites,
+      token: token,
     ).then((value) {
-      favouritesModels = FavouritesModel.fromJson(value.data);
-      printFullText(value.data.toString());
-      emit(ShopSuccessGetFavState());
-    }).catchError((e) {
-      printFullText(e.toString());
-      emit(ShopErrorGetFavState(e.toString()));
+      favoritesModel = FavoritesModel.fromJson(value.data);
+      //printFullText(value.data.toString());
+
+      emit(ShopSuccessGetFavoritesState());
+    }).catchError((error) {
+      print(error.toString());
+      emit(ShopErrorGetFavoritesState());
     });
   }
 
   ////////////////////////
-  ChangeFavModel? changeFavModel;
+  ChangeFavModel changeFavModel;
 
   void changeFavouriteStatus(int productId) {
-    favourutes[productId] = !favourutes[productId]!;
+    favourutes[productId] = !favourutes[productId];
     emit(ShopChangeFavState());
     DioHelper.postData(
       url: getFavorites,
@@ -189,32 +197,59 @@ class ShopBloc extends Cubit<ShopStates> {
     ).then((value) {
       changeFavModel = ChangeFavModel.fromJson(value.data);
       printFullText('Item Status${value.data}');
-      if (!changeFavModel!.status!) {
-        favourutes[productId] = !favourutes[productId]!;
+      if (!changeFavModel.status) {
+        favourutes[productId] = !favourutes[productId];
       } else {
-        getFavourites();
+        getFavorite();
       }
-      emit(ShopSuccessChangeFavState(changeFavModel!));
+      emit(ShopSuccessChangeFavState(changeFavModel));
     }).catchError((e) {
-      favourutes[productId] = !favourutes[productId]!;
+      favourutes[productId] = !favourutes[productId];
       emit(ShopErrorChangeFavState(e));
     });
   }
 
 ////////////////////////////////////////
-  LoginModel? userModel;
+  LoginModel userModel;
 
   void getUserData() {
     emit(ShopLoadingUserDataState());
     DioHelper.getData(
       url: PROFILE,
+      token: token,
     ).then((value) {
       userModel = LoginModel.fromJson(value.data);
-     // printFullText(userModel!.data!.name.toString());
-      emit(ShopSuccessUserDataState(userModel!));
-    }).catchError((e) {
-      //printFullText(e.toString());
-      emit(ShopErrorUserDataState(e.toString()));
+      printFullText(userModel.data.name.toString());
+      emit(ShopSuccessUserDataState(userModel));
+    }).catchError((error) {
+      print(error.toString());
+      emit(ShopErrorUserDataState());
+    });
+  }
+
+  void updateUserData({
+    @required String name,
+    @required String email,
+    @required String phone,
+  }) {
+    emit(ShopLoadingUpdateUserState());
+
+    DioHelper.postData(
+      url: UPDATE_PROFILE,
+      token: token,
+      data: {
+        'name': name,
+        'email': email,
+        'phone': phone,
+      },
+    ).then((value) {
+      userModel = LoginModel.fromJson(value.data);
+      printFullText(userModel.data.name);
+
+      emit(ShopSuccessUpdateUserState(userModel));
+    }).catchError((error) {
+      print(error.toString());
+      emit(ShopErrorUpdateUserState());
     });
   }
 }
