@@ -31,7 +31,7 @@ class ShopBloc extends Cubit<ShopStates> {
     HomeScreen(),
     CategoriesScreen(),
     FavouritesScreen(),
-    SettingsScreen(),
+    ProfileScreen(),
   ];
 
   List<BottomNavigationBarItem> bottomItemsArabic = [
@@ -57,7 +57,7 @@ class ShopBloc extends Cubit<ShopStates> {
       icon: Icon(
         Icons.settings,
       ),
-      label: 'الاعدادات',
+      label: 'الملف الشخصي',
     ),
   ];
 
@@ -82,9 +82,9 @@ class ShopBloc extends Cubit<ShopStates> {
     ),
     BottomNavigationBarItem(
       icon: Icon(
-        Icons.settings,
+        Icons.account_box_outlined,
       ),
-      label: 'Settings',
+      label: 'Account',
     ),
   ];
 
